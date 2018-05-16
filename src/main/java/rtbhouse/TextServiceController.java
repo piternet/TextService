@@ -22,7 +22,7 @@ public class TextServiceController {
 
     @RequestMapping("/textservice")
     public String service(@RequestParam(value = "line") String line, @RequestParam(value = "user") String user) throws JsonProcessingException {
-        logger.log(Level.INFO, "{1} just sent a request.", user);
+        logger.log(Level.INFO, "{0} just sent a request.", user);
         return mapper.writeValueAsString(new TextServiceResponse(prepareResponse(line)));
     }
 
