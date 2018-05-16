@@ -11,4 +11,6 @@ z którym można komunikować się pod `localhost:8080/textservice`.
 #### Logowanie
 Aplikacja domyślnie loguje informacje o żądaniach od użytkowników na standardowe wyjście.
 Jeśli chcemy zapisywać logi do pliku, należy w opcjach kompilacji (`_JAVA_OPTIONS`) ustawić 
-flagę `-Djava.util.logging.config.file=/sciezka/do/pliku.log`.
+flagę
+
+`-Djava.util.logging.config.file=/sciezka/do/pliku.log`.
