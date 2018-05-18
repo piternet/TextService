@@ -5,6 +5,8 @@ import java.util.Date;
 
 public class TextServiceResponse {
 
+    public final static String ERROR_JSON = "{'error':'Bad line number'}";
+
     public final String content;
     public final String date;
 

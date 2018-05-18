@@ -1,23 +1,23 @@
 package rtbhouse;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.ParseException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class TextService {
 
-    private List<String> lines;
+    private List<Long> linePositions;
+    private RandomAccessFile file;
 
     public TextService(String path) {
-        File file = openFile(path);
         try {
-            this.lines = splitFileIntoLines(file);
+        this.file = new RandomAccessFile(path, "r");
+        this.linePositions = new ArrayList<>();
+        determineLinePositions(file);
         } catch (Exception e) {
             System.err.println("File with given path not found!");
-            System.exit(0);
+            System.exit(1);
         }
     }
 
@@ -28,21 +28,22 @@ public class TextService {
         } catch (NumberFormatException e) {
             n = -1;
         }
-        if (n < 0 || n >= lines.size())
+        if (n <= 0 || n > linePositions.size())
             throw new LineDoesNotExistException();
-        return lines.get(n-1);
-    }
-
-    private List<String> splitFileIntoLines(File file) throws FileNotFoundException {
-        List<String> lines = new ArrayList<String>();
-        Scanner in = new Scanner(file);
-        while (in.hasNextLine()) {
-            lines.add(in.nextLine());
+        try {
+            file.seek(linePositions.get(n-1));
+            return file.readLine();
+        } catch (Exception e) {
+            throw new LineDoesNotExistException();
         }
-        return lines;
     }
 
-    private File openFile(String path) {
-        return new File(path);
+    private void determineLinePositions(RandomAccessFile file) throws IOException {
+        long pointer = file.getFilePointer();
+        while (pointer < file.length()) {
+            this.linePositions.add(pointer);
+            file.readLine();
+            pointer = file.getFilePointer();
+        }
     }
 }
